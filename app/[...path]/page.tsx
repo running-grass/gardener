@@ -34,8 +34,8 @@ export default function Page({ params } : Ctx) {
   </>
 }
 
-export async function generateStaticParams() {
-  const posts = await getNotes()
+export function generateStaticParams() {
+  const posts = getNotes()
   return posts.map((post) => ({
     path: post.split('/'),
   }));

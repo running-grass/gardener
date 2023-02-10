@@ -11,7 +11,13 @@ const getChildrens = (path: string) => {
 
   const arr = []
   for (const name of childNames) {
+    if (name.startsWith('.')) {
+      continue;
+    }
+    
     const childPath = `${path}/${name}`;
+
+
     if (fs.statSync(childPath).isDirectory()) {
       const childChild = getChildrens(childPath);
       childChild?.forEach(f => arr.push(f));
