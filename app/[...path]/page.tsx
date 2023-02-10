@@ -1,8 +1,8 @@
 import { existsSync, readFileSync } from "fs";
 import { env } from "process";
 import Mdit from 'markdown-it';
-import wikilinks from '@gardeners/markdown-it-wikilinks';
-
+import wikilinks from 'markdown-it-wikitext';
+import { getNotes } from "../../lib/note";
 
 type Ctx = {
   params: {
@@ -29,16 +29,14 @@ export default function Page({ params } : Ctx) {
     __html : md.render(fileContent)
   };
   return <>
-    <div dangerouslySetInnerHTML={html}>
+    <div className="prose lg:prose-xl" dangerouslySetInnerHTML={html}>
     </div>
   </>
 }
 
-// export async function generateStaticParams() {
-//   // const posts = await getPosts();
-  
-//   const posts = [['a'], ['b', 'c']];
-//   return posts.map((post) => ({
-//     path: post,
-//   }));
-// }
+export async function generateStaticParams() {
+  const posts = await getNotes()
+  return posts.map((post) => ({
+    path: post.split('/'),
+  }));
+}
