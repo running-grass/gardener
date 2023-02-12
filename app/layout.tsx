@@ -1,5 +1,11 @@
-import './globals.css'
+import dayjs from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime';
+import 'dayjs/locale/zh-cn';
+import './globals.css';
 import { AnalyticsWrapper } from './components/analytics';
+
+dayjs.extend(relativeTime);
+dayjs.locale('zh-cn');
 
 export default function RootLayout({
   children,
@@ -8,15 +14,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="zh">
-      {/*
-        <head /> will contain the components returned by the nearest parent
-        head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
-      */}
       <head />
-      <body className='p-4'>
+      <body className="p-4 prose lg:prose-xl" >
         {children}
         <AnalyticsWrapper />
       </body>
     </html>
   )
-}
+};

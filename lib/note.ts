@@ -1,24 +1,28 @@
-import fs, { existsSync, readdirSync } from "fs";
+import { execSync } from "child_process";
+import dayjs from "dayjs";
+import { existsSync, readdirSync, readFileSync } from "fs";
 import path from "path";
-import { env } from "process";
+import { NoteMeta } from "./types";
 
+
+const projectRoot = process.cwd();
+const noteRoot = path.resolve(projectRoot, 'notes')
 
 const getChildrens = (path: string) => {
   if (!existsSync(path)) {
     return []
   }
-  const childNames = readdirSync(path);;
+  const childNames = readdirSync(path, { withFileTypes: true});
 
   const arr = []
-  for (const name of childNames) {
-    if (name.startsWith('.')) {
+  for (const child of childNames) {
+    if (child.name.startsWith('.')) {
       continue;
     }
     
-    const childPath = `${path}/${name}`;
+    const childPath = `${path}/${child.name}`;
 
-
-    if (fs.statSync(childPath).isDirectory()) {
+    if (child.isDirectory()) {
       const childChild = getChildrens(childPath);
       childChild?.forEach(f => arr.push(f));
     } else {
@@ -29,11 +33,22 @@ const getChildrens = (path: string) => {
   return arr;
 }
 
-/**
- * 获取所有笔记的相对路径名，不包括
- * @returns 相对目录
- */
-export const getNotes = () => {
-  const path1 = env.PWD + '/notes';
-  return getChildrens(path1).map(f => path.relative(path1, f).replace('.md', ''));
+export const getUpdateTime = (absPath: string) => {
+  const t = execSync(`git log -n 1 --pretty="%ci" --  ${absPath}`, {
+    cwd: path.resolve(process.cwd(), 'notes'),
+  }).toString();
+  return t;
 }
+
+export const getAllNotes : () => NoteMeta[]  = () => {
+  return getChildrens(noteRoot).map(absPath => {
+    return {
+      filePath: absPath,
+      fileName: path.relative(noteRoot,absPath).replace('.md', ''),
+      updateTime: dayjs(getUpdateTime(absPath)),
+      content: readFileSync(absPath).toString('utf-8'),
+    }
+  })
+}
+
+export const allNotes = getAllNotes();
