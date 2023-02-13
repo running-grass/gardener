@@ -1,0 +1,23 @@
+* Gardener
+
+超早期开发中。
+
+使用 nextjs 把 Markdown 发布为数字花园。
+
+** 使用方式
+1. fork 本项目
+2. 修改`notes`子模块为自己的 git 仓库，或者使用它作为 Markdown 文件目录
+3. 部署到 Vercel
+
+** 使用到的相关开源项目
++ react
++ nextjs
++ tailwindcss
++ dayjs
+
+** 路线图
+*** TODO [#A] 增加元信息的解析
+*** TODO [#C] 支持版本记录查看(仅限 git 子仓库模式)
+*** TODO [#A] 支持双向链接
+*** TODO [#B] 支持力导向图
+*** TODO [#B] 支持悬浮预览
