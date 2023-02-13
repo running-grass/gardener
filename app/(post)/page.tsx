@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAllNotes } from "../lib/note";
+import { getAllNotes } from "../../lib/note";
 
 
 

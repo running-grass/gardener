@@ -1,6 +1,6 @@
 import Mdit from 'markdown-it';
 import wikilinks from 'markdown-it-wikitext';
-import { allNotes } from "../../lib/note";
+import { getAllNotes } from "../../../lib/note";
 
 
 type Ctx = {
@@ -19,7 +19,7 @@ export default function Page({ params } : Ctx) {
   const { path } = params;
   const pathStr = path.map(decodeURI ).join('/');
 
-  const noteFiltered = allNotes.filter(note => note.fileName === pathStr);
+  const noteFiltered = getAllNotes().filter(note => note.fileName === pathStr);
 
   if (noteFiltered.length !== 1) {
     console.error(pathStr, '没找到');
@@ -41,7 +41,7 @@ export default function Page({ params } : Ctx) {
 }
 
 export function generateStaticParams() {
-  return allNotes.map((post) => ({
+  return getAllNotes().map((post) => ({
     path: post.fileName.split('/')
   }));
 }

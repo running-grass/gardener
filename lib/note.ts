@@ -12,14 +12,14 @@ const getChildrens = (path: string) => {
   if (!existsSync(path)) {
     return []
   }
-  const childNames = readdirSync(path, { withFileTypes: true});
+  const childNames = readdirSync(path, { withFileTypes: true });
 
   const arr = []
   for (const child of childNames) {
     if (child.name.startsWith('.')) {
       continue;
     }
-    
+
     const childPath = `${path}/${child.name}`;
 
     if (child.isDirectory()) {
@@ -40,15 +40,21 @@ export const getUpdateTime = (absPath: string) => {
   return t;
 }
 
-export const getAllNotes : () => NoteMeta[]  = () => {
-  return getChildrens(noteRoot).map(absPath => {
-    return {
-      filePath: absPath,
-      fileName: path.relative(noteRoot,absPath).replace('.md', ''),
-      updateTime: dayjs(getUpdateTime(absPath)),
-      content: readFileSync(absPath).toString('utf-8'),
-    }
-  })
+let allNotes: NoteMeta[] = [];
+export const getAllNotes: () => NoteMeta[] = () => {
+  if (allNotes.length === 0) {
+    allNotes = getChildrens(noteRoot).map(absPath => {
+      return {
+        filePath: absPath,
+        fileName: path.relative(noteRoot, absPath).replace('.md', ''),
+        slug: path.relative(noteRoot, absPath).replace('.md', ''),
+        updateTime: dayjs(getUpdateTime(absPath)),
+        content: readFileSync(absPath).toString('utf-8'),
+      }
+    })
+  }
+
+  return allNotes
 }
 
-export const allNotes = getAllNotes();
+// export const allNotes = getAllNotes();

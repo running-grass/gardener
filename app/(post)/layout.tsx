@@ -3,10 +3,12 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import 'dayjs/locale/zh-cn';
 import './globals.css';
 import { AnalyticsWrapper } from './components/analytics';
+import { generateRssFeed } from "../../lib/rss";
 
 dayjs.extend(relativeTime);
 dayjs.locale('zh-cn');
 
+generateRssFeed();
 export default function RootLayout({
   children,
 }: {
