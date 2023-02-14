@@ -13,7 +13,9 @@
 + react
 + nextjs
 + tailwindcss
++ headlessui
 + dayjs
++ flexsearch 浏览器全文检索
 
 ** 路线图
 *** TODO [#A] 增加元信息的解析
@@ -24,3 +26,4 @@
 *** TODO [#B] 增加 Google 分析
 *** DONE [#B] 增加 RSS 订阅支持
 CLOSED: [2023-02-13 一 12:25]
+*** TODO [#A] 搜索功能

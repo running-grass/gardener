@@ -43,6 +43,7 @@ export const getUpdateTime = (absPath: string) => {
 let allNotes: NoteMeta[] = [];
 export const getAllNotes: () => NoteMeta[] = () => {
   if (allNotes.length === 0) {
+    console.log('重新读取文件');
     allNotes = getChildrens(noteRoot).map(absPath => {
       return {
         filePath: absPath,
