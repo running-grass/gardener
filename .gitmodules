@@ -1,3 +1,4 @@
 [submodule "notes"]
 	path = notes
 	url = https://github.com/running-grass/digital-garden.git
+	branch = main
