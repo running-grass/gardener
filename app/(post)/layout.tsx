@@ -14,7 +14,7 @@ dayjs.locale('zh-cn');
 generateRssFeed();
 
 function Header() {
-  return <header className="flex justify-between items-center">
+  return <header className="flex justify-between items-center mb-4 pb-4 shadow">
     <nav>
       <Link href="/">首页</Link>
     </nav>
@@ -41,7 +41,7 @@ export default function RootLayout({
     <html lang="zh">
       <head />
       <body className="p-4 prose lg:prose-xl m-auto" >
-          <Header />
+          <Header  />
           {children}
           <AnalyticsWrapper />
           <Footer />

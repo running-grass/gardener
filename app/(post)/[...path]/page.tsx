@@ -1,7 +1,5 @@
-import Mdit from 'markdown-it';
-import wikilinks from 'markdown-it-wikitext';
 import { getAllNotes } from "../../../lib/note";
-
+import { md } from '../../../lib/markdown';
 
 type Ctx = {
   params: {
@@ -9,15 +7,9 @@ type Ctx = {
   }
 }
 
-
-const md = Mdit().use(wikilinks({
-  uriSuffix: '',
-}));
-
-
-export default function Page({ params } : Ctx) {
+export default function Page({ params }: Ctx) {
   const { path } = params;
-  const pathStr = path.map(decodeURI ).join('/');
+  const pathStr = path.map(decodeURI).join('/');
 
   const noteFiltered = getAllNotes().filter(note => note.fileName === pathStr);
 
@@ -27,17 +19,27 @@ export default function Page({ params } : Ctx) {
   }
 
   const note = noteFiltered[0];
-  
-  const html = {
-    __html : md.render(note.content)
-  };
-  return <>
-    <h1>{note.fileName}</h1>
-    <div>更新于: {note.updateTime.toNow()}</div>
 
-    <div dangerouslySetInnerHTML={html}>
-    </div>
-  </>
+  const html = {
+    __html: md.render(note.content)
+  };
+  return <main>
+    <article>
+      <header>
+        <h1>{note.fileName}</h1>
+        <section className='flex justify-between'>
+          <address>
+            作者：
+            <a href="https://grass.show/">奔跑的小草</a>
+          </address>
+          <span>更新于: <time>{note.updateTime}</time> </span>
+        </section>
+      </header>
+
+      <section dangerouslySetInnerHTML={html}></section>
+
+    </article>
+  </main>
 }
 
 export function generateStaticParams() {

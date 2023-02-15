@@ -48,7 +48,7 @@ export const generateRssFeed = async () => {
       content: post.fileName,
       author: [author],
       contributor: [author],
-      date: post.updateTime.toDate(),
+      date: new Date(post.updateTime),
     });
   });
 
@@ -58,8 +58,6 @@ export const generateRssFeed = async () => {
   fs.writeFileSync("./public/rss/feed.xml", feed.rss2());
   fs.writeFileSync("./public/rss/atom.xml", feed.atom1());
   fs.writeFileSync("./public/rss/feed.json", feed.json1());
-  fs.mkdirSync("./public/cache", { recursive: true });
-  fs.writeFileSync("./public/cache/notes.json", JSON.stringify(posts));
 
   return _feed;
 };

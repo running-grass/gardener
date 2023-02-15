@@ -1,6 +1,6 @@
 import { execSync } from "child_process";
 import dayjs from "dayjs";
-import { existsSync, readdirSync, readFileSync } from "fs";
+import fs, { existsSync, fstat, readdirSync, readFileSync } from "fs";
 import path from "path";
 import { NoteMeta } from "./types";
 
@@ -40,22 +40,28 @@ export const getUpdateTime = (absPath: string) => {
   return t;
 }
 
+let cachePath = './public/cache/notes.json';
 let allNotes: NoteMeta[] = [];
 export const getAllNotes: () => NoteMeta[] = () => {
-  if (allNotes.length === 0) {
+
+  if (!fs.existsSync(cachePath)) {
     console.log('重新读取文件');
     allNotes = getChildrens(noteRoot).map(absPath => {
       return {
         filePath: absPath,
         fileName: path.relative(noteRoot, absPath).replace('.md', ''),
         slug: path.relative(noteRoot, absPath).replace('.md', ''),
-        updateTime: dayjs(getUpdateTime(absPath)),
+        updateTime: dayjs(getUpdateTime(absPath)).format("YYYY-MM-DD HH:mm"),
         content: readFileSync(absPath).toString('utf-8'),
       }
     })
+
+
+    fs.mkdirSync("./public/cache", { recursive: true });
+    fs.writeFileSync("./public/cache/notes.json", JSON.stringify(allNotes));
   }
 
-  return allNotes
+  return JSON.parse(fs.readFileSync(cachePath).toString('utf-8'));
 }
 
 // export const allNotes = getAllNotes();

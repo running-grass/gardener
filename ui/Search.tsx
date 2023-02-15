@@ -1,27 +1,36 @@
 "use client"
 
-import { Fragment, useCallback, useState } from 'react'
+import { Fragment, useCallback, useRef, useState } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
-import { NoteMeta } from '@/lib/types'
 import useSWR, { SWRConfig } from 'swr'
 import { useRouter } from 'next/navigation';
+import { useHotkeys } from 'react-hotkeys-hook'
 
-// eslint-disable-next-line
+import { NoteMeta } from '@/lib/types'
+
 const fetcher = (input: RequestInfo | URL, init?: RequestInit | undefined) => fetch(input, init).then((res) => res.json())
 
 export default function Search() {
   const [query, setQuery] = useState('');
+
   const router = useRouter();
-  const onSelect = useCallback((note: NoteMeta) => {
-    router.push(`/${note.fileName}`);
+  const onSelect = useCallback((note: NoteMeta | null) => {
+    note && router.push(`/${note.fileName}`);
   }, []);
+
+
+  const inputEl = useRef<HTMLInputElement>(null);
+  useHotkeys('ctrl+k', () => {
+    inputEl.current?.focus();
+  })
+
 
   const { data: allNote, error, isLoading } = useSWR<NoteMeta[]>("/cache/notes.json", fetcher)
 
   const filteredNotes: NoteMeta[] =
     !allNote ? [] :
       query === ''
-        ? allNote
+        ? allNote.slice(0, 10)
         : allNote.filter((note) => note.fileName.toLowerCase().includes(query.toLowerCase())).slice(0, 10);
 
   return (
@@ -30,7 +39,7 @@ export default function Search() {
         <div className="not-prose relative mt-1">
           <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
             <Combobox.Input
-
+              ref={inputEl}
               className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
               displayValue={(note: NoteMeta) => note?.fileName}
               onChange={(event) => setQuery(event.target.value)}

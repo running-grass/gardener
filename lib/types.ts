@@ -4,7 +4,7 @@ export type NoteMeta = {
   /**
    * 显示的笔记title
    */
-  fileName : string 
+  fileName : string
 
   /**
    * 发布后的路径
@@ -17,7 +17,7 @@ export type NoteMeta = {
   /**
    * 最后一次更新时间
    */
-  updateTime: Dayjs
+  updateTime: string
   /**
    * 内容
    */
