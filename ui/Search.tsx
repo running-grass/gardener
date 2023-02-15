@@ -11,14 +11,12 @@ const fetcher = (input: RequestInfo | URL, init?: RequestInit | undefined) => fe
 
 export default function Search() {
   const [query, setQuery] = useState('');
-
-  // const [allNote, setAllNote] = useState<NoteMeta[]>([]);
-  // const [selected, setSelected] = useState<NoteMeta | null>();
   const router = useRouter();
   const onSelect = useCallback((note: NoteMeta) => {
     router.push(`/${note.fileName}`);
-  }, [])
-  const { data: allNote, error, isLoading } = useSWR<NoteMeta[]>("/api/note", fetcher)
+  }, []);
+
+  const { data: allNote, error, isLoading } = useSWR<NoteMeta[]>("/cache/notes.json", fetcher)
 
   const filteredNotes: NoteMeta[] =
     !allNote ? [] :

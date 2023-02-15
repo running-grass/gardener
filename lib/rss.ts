@@ -4,6 +4,10 @@ import { getAllNotes } from "./note";
 
 let _feed: Feed | null = null
 
+// export const generateSearchFile = async () => {
+//   getA
+// }
+
 export const generateRssFeed = async () => {
 
   if (_feed) return _feed;
@@ -34,7 +38,7 @@ export const generateRssFeed = async () => {
     },
     author,
   });
-  posts.forEach((post) => {
+  posts.slice(0, 20).forEach((post) => {
     const url = `${siteURL}/${post.slug}`;
     feed.addItem({
       title: post.fileName,
@@ -54,6 +58,8 @@ export const generateRssFeed = async () => {
   fs.writeFileSync("./public/rss/feed.xml", feed.rss2());
   fs.writeFileSync("./public/rss/atom.xml", feed.atom1());
   fs.writeFileSync("./public/rss/feed.json", feed.json1());
+  fs.mkdirSync("./public/cache", { recursive: true });
+  fs.writeFileSync("./public/cache/notes.json", JSON.stringify(posts));
 
   return _feed;
 };
