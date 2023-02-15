@@ -27,4 +27,4 @@ jobs:
         run: git submodule foreach "git checkout main && git pull"
 
       - name: 提交更新后的版本信息
-        run: git commit -am "chore: 更新笔记目录" && git push
+        run: "git commit -am 'chore: 更新笔记目录' && git push"
