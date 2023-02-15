@@ -1,0 +1,30 @@
+name: 发布数字花园
+
+on:
+  schedule:
+    # 定时构建
+    - cron: '0 */1 * * *'
+  # 手动触发
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 检出代码仓库
+        uses: actions/checkout@v3
+        ref: deploy
+        with:
+          submodules: recursive
+
+      - name: 配置git config
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: 更新子仓库
+        run: git submodule foreach "git checkout main && git pull"
+
+      - name: 提交更新后的版本信息
+        run: git commit -am "chore: 更新笔记目录" && git push
